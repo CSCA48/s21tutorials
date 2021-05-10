@@ -15,7 +15,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.data.authors[site.author].email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: CSCA48 Winter 2021
+title: CSCA48 Summer 2021
 description: Tutorial Notes
 author: [angela, mustafa] # Edit also the author details in "_data/authors.yml" (multiple authors possible for a post).
 url: "https://csca48.github.io" # The base hostname & protocol for your site, e.g. http://example.com.
