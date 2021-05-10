@@ -25,7 +25,7 @@ lang: en # The base language of your site, can be overwritten on a page or post 
 show_lang_in_post_listings: true # Home page, archive, post lists on category and tag pages (useful, when you deliver mixed content).
 feed_limit: 25
 styles: # If you need more control over the layout please see /assets/main.scss and _sass/sidebar
-  brand-color: "#7dbfbe" # Used for the sidebar and the links
+  brand-color: "#00B2FF" # Used for the sidebar and the links
   link-text-decoration: underline # On light brand colors you may want to use underline for the links
 disqus:
   shortname:
