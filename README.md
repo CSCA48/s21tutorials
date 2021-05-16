@@ -16,4 +16,4 @@ To run locally:
 
 ---
 
-Check the website out [here](http://csca48f20.github.io/tutorials).
+Check the website out [here](https://csca48.github.io/s21tutorials/).
