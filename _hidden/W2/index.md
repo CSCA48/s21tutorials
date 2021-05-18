@@ -1,135 +1,145 @@
 ---
-title: Week 1 Tutorial
+title: Week 2 Tutorial
 sidebar: 2
-sidebar-title: Week 1
+sidebar-title: Week 2
 ---
 
 
 ---
 
 
-<p align="center"> <a href='https://www.youtube.com/playlist?list=PLlTc---1rMDX_e0lH5jX4VZy0nGFeYDbb'> Recorded videos (courtesy Willy) </a> </p>
+<p align="center"> <a href='https://youtu.be/6YJWDlFQyWc'> Recorded video (courtesy Willy) </a> </p>
 
 ---
 
-# C Basics
+# C Memory Model and Arrays
 
 ---
 
-You all should already have `gcc` working on your local machines, and be ready to attempt exercise 1 once it comes out. Today, we're going to go over C fundamentals, and then look at a few exercises. Here's a list of few things you should already know:
-
-
----
-
-## Variables
+## Memory Model in C
 
 ---
 
-- To declare a variable, you *need* to explicitly give it a type (which can never be changed). **Declaration** means you are simply telling the compiler that this variable exists. A variable *declaration* looks like this:
+Memory in C can be thought of as a locker room! We have one locker for each variable, all locker boxes are numbered in increasing order and they can only be accessed by the right user.
+
+Associated with each locker is important information like the memory address (locker number, which is unique), variable name, variable type and the variable value. Here's a picture you can keep in your mind:
+
+![empty](MMEmpty.png)
+
+---
+
+Remember that lockers are created in memory automatically for:
+- Declared variables
+- Input parameters to functions
+- Storing return values of functions
+
+> In the next unit, we will learn about explicitly asking for some lockers in C!
+
+---
+
+
+Let's try an example and draw the diagram of the memory model for the following piece of code, right at the point where the result is returned (right before releasing the spaced reserved for the funcion)
+
+
+- Remember that each function gets it's own area of lockers!
+
+> If you haven't already, it would be a good time to go read the Unit 2 notes before attempting these yourself.
+
 ```c
-// type   name
-    double myDouble;
-```
-- Giving the variable a value is called *initialization*. Unlike Python, declaration and initialization are seprate in C. However, you can usually put them in one line. This looks as follows:
+#include<stdio.h>
 
-```c
-double myDouble;     // Declaration
-myDouble = 3.14;     // Initialization
+float div_by_two(int s) {
+    float result;
+    result = s / 2;
+    // Draw the memory model at this point!
+    return result;      
+}
 
-int myInt = 1729;    // But can also do this...
-```
-
-- There are a few basic data types in C:
-    1.  `int` - Integer
-    2.  `long` - (Long) Integers, much bigger range of values
-    3.  `char` - Characters; effectively an integer from -128 to 127
-    4.  `float` - A floating point number (fractional)
-    5.  `double` - A more precise floating point number (uses *double* the space)
+int main() {
+    int x, result;
+    float y, z;
     
-    You will also eventually see variables defined as `unsigned int`, `unsigned char`, etc. When `unsigned` is used with one of the types that stores integers (`int`, `long` and `char`), it simply means that the variable only stores **postitive** values. (it has no sign). This is helpful to (1) avoid errors with negative numbers and (2) It lets us store more positive numbers in the same amount of space.
+    x = 3;
+    y = div_by_two(x)
+    z = y + 3;
+    
+    result = z / 2;
+    printf("The result is: %d\n", result);
 
----
-
-## Functions
-
----
- 
-Remember that a function *declaration* has the following parts (in order):
- - Return type of the function
- - Name of the function
- - Types of the input parameters (optionally names)
-
-*However, when *defining* a function you must also give the parameters names.*
-
-```c
-int mySum(int, int);            // A valid declaration
-
-int mySum(int a, int b) {
-    return a + b;               // A function definition
+    return 0;
 }
 
-int myProduct(int a, int b) {
-    return a * b;               // Can do them together
-}
-```
-Note that it may not always be a good idea to define and declare your function together. You will see issues arise with this as we move forward in the course.
-
----
-
-## Conditionals
-
----
-
-Nothing fancy here, you know what to expect. Make sure you have `()` around your conditions.
-```c
-if (condition) {
-
-} else if (condition) {
-
-} else {
-
-}
 ```
 
+If you're working digitally, you can use this template to draw on:
+
+![template](MMTemp.png)
+
 ---
 
-## Loops
+## Arrays & Strings
 
 ---
 
-- For loops have 3 parts: initialization, condition and increment. Here is an example:
+### Arrays
+
+- Arrays are a fixed-size collection of contiguous boxes (in memory) of the same data type. 
+
+- A *very* important thing to remember is that when arrays are passed to functions by telling its location in memory. This means that the function directly access and modifies the original array. It does **not** make a copy.
+
+- Remember that unlike Python, C does not warn you about using out-of-bounds indeces so it is your responsibility to be careful on how you are indexing, otherwise you will access elements outside of the array.
+
+---
+
+
+### Strings
+
+Strings are also known as arrays of characters, but with an special add-on: the end-of-string delimiter `\0`. The end-of-string delimiter indicates when the string ends.
+
+Let's look at the following piece of code, what do you think it will print out?
+
 ```c
-// This is similar to `for i in range(n)`
-for (int i = 0;    i < n;    i++) {  ... body ... }
-//     init.      cond.     inc.
-```
+#include<stdio.h>
 
-> `i++` is a shorthand for saying 'increment the value of `i` by 1, and return the **old** value'. Since here we do not actually care about the return value of the increment (`i++`), it serves the purpose of simply `i = i + 1`.
+int main() {
+    char original[1024] = "This is the original string!";
+    char unoriginal[1024] = "And this is another string!";
 
-> Similarly, you can also do `++i`, which is shorthand for 'increment the value of `i`, and return the **new** value'.
+    // We want `original` to be the same string as `unoriginal`
+    original = unoriginal;
+    printf("%s\n", original);
 
-- While loops have just the condition. The initialization and increment need to be done by you:
-```c
-int i = 0;
-//     cond.
-while (i < n) {  
-    ... body ... 
-    i++;
+    return 0;
 }
 ```
 
----
-
-## Libraries
-
----
-
-You won't always have all the functions available to you directly. Sometimes it is a good idea to use functions implemented by others which are part of a library instead of implementing them yourself. `stdio.h` is a library we use which is responsible for handling input / output for example. Here we will also use the `math.h` library. Import a library using:
+How about the following piece of code; what does it do?
 
 ```c
-#include<library.h>
+#include<stdio.h>
+
+int main() {
+    int array_one[10];
+    int array_two[5];
+
+    for (int i = 0; i < 5; i++){
+        array_two[i] = i;
+    }
+
+    // We want to initialize the first 5 elements of array_one
+    // to be the elements of array_two
+    array_one = array_two;
+    
+    return 0;
+}
 ```
-> Note that `#include` is what is called a 'compiler directive'. It basically takes all the content of the file `library.h` (which `gcc` knows where to find), and replaces the line with it.
+
+As we could see, both of them do not compile. 
+
+<details> 
+  <summary>How can we fix them in order to make them work? </summary>
+   - You have to do it yourself. If we want to make a copy of an array, we have to do it each element at once. We will see other build-in functions later, that can make our job easier.
+</details>
 
 ---
 
@@ -137,66 +147,64 @@ You won't always have all the functions available to you directly. Sometimes it 
 
 ---
 
-Write a program that prints out a graph of the function sin(x) for values of x from 0 to 2π in increments of 0.25. Here's some example output:
+Write a function that takes two input strings and *swaps* their content. Note that the size of the arrays for each string is 1024, but the strings could have a different length.
 
-![ex1](W2_Ex1.png)
+Here's a template for you to complete:
 
-and here's some code you can fill in if you're having trouble doing it all yourself (it's okay! You're just getting started).
 ```c
-#include <stdio.h>  
-#include <math.h>   // Import math for sin()!
+#include<stdio.h>
+
+void swap( ... ) {
+    ...
+    return;
+}
 
 int main() {
-  float pi = M_PI;   // This is defined for us in math.h
- 
-  // Main loop over the x values
-  for (float x = ____; x < ______; x += _____) {
-    // You will need another loop inside here...
+    char first[1024] = "Christmas is in eleven months!";
+    char second[1024] = "It's beginning to look a lot like Christmas";
 
-    
-  }
-  return 0;
+    printf("F: %s\nS: %s\n", first, second);
+    // Expected:
+    // F: Christmas is in eleven months!
+    // S: It's beginning to look a lot like Christmas
+
+    swap(first, second);
+
+    printf("F: %s\nS: %s\n", first, second);
+    // Expected:
+    // F: It's beginning to look a lot like Christmas
+    // S: Christmas is in eleven months!
+
+    return 0;
 }
 
 ```
 
 ---
 
-## Spicing it up a little
+## Let's go further
+
+Write a function `strfind()` that *searches* for a given string in the specified main string, and returns the index of the first occurrence of the given string. If there is no match it returns `-1`. This will be extremely useful in your exercise 1. Here is some example output for this function:
+
+```c
+strfind("My name is Angela", "Angela") -> 11
+strfind("My name is Willy", "Charles") -> -1
+``` 
 
 ---
 
-Now, modify your existing solution of the previous part and have a vertical line that represents the x-axis, in other words, have a line that corresponds to y=0.
-
-![ex2](W2_Ex2.png)
-
----
-
-# Key Takeaway(s)
-
----
-- Every variable in C has an associated data type that cannot be changed. You should be familiar with the different data types C presents.
-
-- Understand how to declare a function. Remember that, unlike Python, you need to begin the declaration with a return type.
-
-- Conditionals are very similar to Python. Familiarize yourself with the standard comparison operators (i.e. `==`, `!=`, `<`, `>`) and logical operators (i.e. `||` (which is a logical OR) , `&&` (which is a logical AND)).
-
-- Be familiar with defining a for loop and while loop. Understanding the difference between the two is also important.
-
-- Similar to Python, C also has libraries in which you can use. You can use a library by typing `#include<library.h>`.
-
----
 
 # Additional Exercises
 
 ---
 
-These are not necessary, but give you an avenue to develop what you did in this tutorial into something a lot more impressive!
+These are not necessary, but give you an avenue to develop what you did in this tutorial further.
 
 ---
 
-1. Add variables that let you change how long the sin wave is, how wide it is, and how much it is offset from the left side of the screen. Also give the user the option to draw the wave horizontally.
 
-2. Based on whether the value is increasing / decreasing, print out `\`, `|`, `-`, `/` instead of just the asterisks (`*`). Make it look more curve-like. Details are left up to you.
+1. Once you have completed exercise 1, try to use the solution to implement a `replaceAllSubstrings()` function that replaces *every* occurence of a substring with something else. Implementation details are left up to you - you do not have to submit this.
 
-3. Generalize the code so that it can plot out any (reasonable) function like sin. You might have to ask the user to enter bounds on the `x` and `y` axes between which you plot them.
+2. Write a function that takes in a 2-dimensional array (ie, an array of arrays) representing a matrix, and then transposes it. [Here's some starter code.](transpose_matrix.c)
+
+---

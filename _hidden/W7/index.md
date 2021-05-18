@@ -1,127 +1,140 @@
 ---
-title: Week 6 Tutorial
+title: Week 7 Tutorial
 sidebar: 7
-sidebar-title: Week 6
+sidebar-title: Week 7
 ---
 
 ---
 
 
-<p align="center"> <a href="https://youtu.be/94Y_a6DcrL8"> Last week's videos (Thanks Willy!) </a> </p>
+<p align="center"> <a href="https://youtu.be/e3-GDIa1h5k"> Recorded videos (Thanks Will!) </a> </p>
 
 ---
 
-# Linked Lists Recap
+# Insertion Sort
 
-Linked Lists are one of the simplest implementations of the Lists ADT (Abstract Data Type). It is formed by a set of nodes, that are arranged in such a way that each node *points to* the next node. Each node will contain a value and a pointer to the next node.
+
+Insertion Sort is a sorting algorithm that takes one element at a time and compares it with the elements prior to it.
+
+### Example:
+
+Let's consider the array ```[33, 12, 45, 9, 24]```
+
+![insert](insert.jpeg)
 
 ---
 
-## How do we define a Linked List?
+## How can we implement it?
 
 ---
 
-Let's define a generic node:
+Our goal is to sort an array of n elements: [a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>n-1</sub>]
+
+We are going to grab each element one by one, in order, and compare it with all the previous elements, which will be already sorted.
+
+### Pseudocode
+
+1. Loop through the n elements of the array
+2. Get the ith element
+3. Move the the elements of the subarray [a<sub>0</sub>, a<sub>1</sub>, ..., a<sub>i-1</sub>] that are greater than the ith element.
+
+### Starter Code
 
 ```c
-typedef struct list_node {
-   int val;                 // Data stored
-   struct list_node *next   // Pointer to the next list of nodes
-} node;
-```
+# include <math.h>
+# include <stdio.h>
 
----
+void insertionSort(int arr[], int n) {
+  // Use the pseudocode to complete this part
+}
 
-# Exercise: Cupcake delivery
-
-Before attempting each of these exercises, discuss your implementation with your peers and discuss various ways of solving the questions. After solving the questions, there are some extra discussion prompts at the end and a **crunchy** version of the exercise.
-
-Angela found a TikTok recipe of <span style="color:mediumpurple">**purple cupcakes**</span> so she decided to bake some for her A48 TA friends! She will deliver these cupcakes in a first-come first-serve basis. Her plan was to bake 3 cupcakes per TA, but some TAs asked for more...
-
----
-
-## Task 1: Cupcake Delivery list
-
-Define the the structs ```Delivery``` and ```Delivery_List_Node```. The ```Delivery``` struct represents the CDT that contains the name of the recepient (TA) and the number of cupcakes they want. The ```Delivery_List_Node``` struct contains a ```Delivery``` and a pointer to the next ```Delivery_List_Node```.
-
----
-
-## Task 2: New Delivery
-
-Create a function ```new_Delivery_Node``` that will initialize a new ```Delivery_List_Node``` given a name and the number of cupcakes. 
-
----
-
-## Task 3: Inserting Deliveries
-
-Create a function ```insert_delivery``` to insert the deliveries from TAs into the ```Delivery_List_Node``` called ```cupcake_delivery_list```. Remember the delivery is first-come first-serve.
-
----
-
-## Task 4: Inserting Priority Deliveries
-
-Brian, Paco and Abbas found out that Angela is giving cupcakes to the other TAs and now they want to try some too. However, they want their orders before than everyone else!
-
-Create a function ```insert_priority_delivery``` to insert special deliveries to the beginning of the ```Delivery_List_Node``` called ```cupcake_delivery_list```.
-
----
-
-This is an example of how you would call the functions from main with some discussion prompts about the implementation.
-
-```c
 int main(){
-    // Task 1 and 2:
-    Delivery_List_Node *cupcake_delivery_list = NULL;
-    // -> Why am I not allocating memory in the previous line?
-    cupcake_delivery_list = new_Delivery_Node("Mustafa", 12);
+  int array[] = {33, 12, 45, 9, 24};
+  int n = 5;
+  insertionSort(array, n);
 
-    // Task 3:
-    insert_delivery(cupcake_delivery_list, "Willy", 36);
-    insert_delivery(cupcake_delivery_list, "Charles", 6);
-    insert_delivery(cupcake_delivery_list, "Maduvan", 6);
-    insert_delivery(cupcake_delivery_list, "Andrew", 1);
-    insert_delivery(cupcake_delivery_list, "Kasra", 12);
-    insert_delivery(cupcake_delivery_list, "Yara", 3);
-    insert_delivery(cupcake_delivery_list, "Clara", 3);
-    insert_delivery(cupcake_delivery_list, "Katrina", 6);
-    insert_delivery(cupcake_delivery_list, "Benjamin", 12);
-    insert_delivery(cupcake_delivery_list, "River", 3);
-    insert_delivery(cupcake_delivery_list, "Sam", 3);
-    insert_delivery(cupcake_delivery_list, "Keshavaa", 3);
-    insert_delivery(cupcake_delivery_list, "Derick", 3);
-    insert_delivery(cupcake_delivery_list, "Alon", 3);
-
-    // -> This insert function is not returning anything, do you
-    // think that's a good idea?
-
-    // Task 4:
-    cupcake_delivery_list = insert_priority_delivery(cupcake_delivery_list, "Paco", 12);
-    cupcake_delivery_list = insert_priority_delivery(cupcake_delivery_list, "Abbas", 12);
-    cupcake_delivery_list = insert_priority_delivery(cupcake_delivery_list, "Brian", 36);
-
-    // -> This new insert function is returning a delivery list pointer,
-    // is it better from our previous implementation? could you implement
-    // this function without returning a pointer?
-
-    // Print to test!
-    Delivery_List_Node *currentNode = cupcake_delivery_list;
-
-    for(int i = 0; i< 18; i++){
-        printf("Order #%d: %s --- %d cupcake(s)\n", i+1,currentNode->order.name, currentNode->order.numOfCupcakes);
-        currentNode = currentNode->next;
-    }
-
-    return 0;
+  // Print to double check
+  for (int i = 0; i < n; i++){
+    printf("%d ", array[i])
+  }
 }
 ```
 ---
 
-## Crunchy version
+## Discussion
 
-The first-come first-serve order might not be the best in this scenario because some people may live close to each other and Angela is scared of taking the highway so we need to reduce the amount of driving.
+---
 
-Re-implement all the previous tasks adding a new field for ```Delivery``` called distance, which represents the distance from Angela's house to the receipient's. For Task 3, we want to insert the orders in order of distance (closer ones to Angela's should be delivered first). For Task 4, we want to still insert the orders at the front, so you might want to update their distance to -1.
+Sort the following arrays by traversing through your code. How many steps does it take to complete the sort?
 
-*Note: I know that technically the distances might be in opposite directions, but this is just an exercise so pretend distance is an accurate way of sorting :)*
+1. ```[33, 12, 45, 9, 24]```
+2. ```[1, 2, 3, 4, 5, 6]```
+3. ```[2, 3, 4, 5, 6, 1]```
+4. ```[6, 5, 4, 3, 2, 1]```
+
+Which one took longer? 
+
+---
+
+# Selection Sort
+
+Selection Sort is a sorting algorithm that in every iteration, finds the minimum element that has not being sorted and moves it at the beginning of the array.
+
+### Example:
+
+Let's consider, again, the array ```[33, 12, 45, 9, 24]```
+
+![select](select.jpeg)
+
+---
+
+## How can we implement it?
+
+---
+
+Our goal is to sort an array of n elements: [a<sub>0</sub>, a<sub>1</sub>, a<sub>2</sub>, ..., a<sub>n-1</sub>]
+
+We are going to find the smallest element of the array and move it at the front to create a sorted array. We will pretty much divide the array into a sorted subarray (the beginning) and the unsorted array (the reminder - elements that haven't been sorted yet). We will swap the found minimum element with the first element of the unsorted portion of the array.
+
+### Pseudocode
+
+1. Loop through the n elements of the array
+2. Find the minimum element in the unsorted portion of the array
+3. Swap the found minimum element with the first element of the unsorted portion.
+
+### Starter Code
+
+```c
+# include <stdio.h>
+
+void selectionSort(int arr[], int n) {
+  // Use the pseudocode to complete this part
+}
+
+int main(){
+  int array[] = {33, 12, 45, 9, 24};
+  int n = 5;
+  selectionSort(array, n);
+  
+  // Print to double check
+  for (int i = 0; i < n; i++){
+    printf("%d ", array[i])
+  }
+}
+```
+---
+
+## Discussion
+
+---
+
+Sort the following arrays by traversing through your code. How many steps does it take to complete the sort?
+
+1. ```[33, 12, 45, 9, 24]```
+2. ```[1, 2, 3, 4, 5, 6]```
+3. ```[2, 3, 4, 5, 6, 1]```
+4. ```[6, 5, 4, 3, 2, 1]```
+
+Which one took longer? Are the results similar to the Insertion Sort?
 
 ---

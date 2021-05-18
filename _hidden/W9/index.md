@@ -1,126 +1,194 @@
 ---
-title: Week 8 Tutorial
+title: Week 9 Tutorial
 sidebar: 9
-sidebar-title: Week 8
+sidebar-title: Week 9
 ---
 
----
-
-
-<p align="center"> <a href="https://youtu.be/fVlrxg754HE"> Recorded videos (Thanks Willy!) </a> </p>
 
 ---
 
-# Binary Trees
 
-A **Binary Tree** consists of nodes that store some type of information, and two links to its children nodes, the left and right child. Nodes can have two, one or zero children.
+<p align="center"> <a href="https://youtu.be/isbd5BAG3_o"> Recorded videos (Thanks Willy!) </a> </p>
 
-The node at the top of the tree is called the **root** node and the nodes with zero children are called **leaf** nodes. Each level in the tree, contains nodes that have the same distance to the root node.
+---
 
-# Binary Search Trees
+# Graphs
 
-A **Binary Search Tree (BST)** is a Binary Tree such that the data of the nodes on the left sub-tree of a node have value less than, or equal to the value of the data in the node; and the data of the nodes on the right sub-tree of a node have value greater than the value of the data in the node. 
+Graphs are used as a model to represent the relationship between the representation of items and problem we need to solve. We are trying to find a different way to represent a problem and use tools to solve it.
 
-With that set up, is easier for us to traverse through the tree to find a specific node, as we know which sub-tree to go to based on the value of the node. We call the values used to search: **keys**.
+---
 
-## BST of Integers
+# Definition of a Graph
 
-Each node can contain any data type, but today we will work with a BST of integers. Let's start defining the node.
+Each graph **G = (V,E)** consists of:
+
+- A set of **nodes** that represent data items. We call that set **V**.
+- A set of **edges** that represent the connections (relationship) between nodes. We call that set **E**.
+
+![graph](graph.jpeg)
+
+---
+
+# Types of Graphs
+
+There are two general types of graphs, **undirected** and **directed**
+
+## Undirected graphs
+
+Graphs with edges that represent direction in both ways, in other words, there is a reciprocal relationship.
+
+<span style="color:cornflowerblue">_Example:_</span> Facebook's friend network
+
+![undir](g1.jpeg)
+
+## Directed graphs
+
+Graphs with edges that represent one side direction, in other words, there is a one way relationship.
+
+<span style="color:cornflowerblue">_Example:_</span> Twitter's followers network
+
+![dir](g2.jpeg)
+
+---
+
+# Terms to remember
+
+## Neighbours
+
+For an undirected graph, a node **v** is a **neighbour** of the node **u** if there exists an edge between those two nodes (that edge is represented by **{u,v}**). 
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the neighbour of Mustafa is Paco.
+
+For a directed graph, a node **v** is a **in-neighbour** of the node **u** if there exists an edge **{v,u}** from **v** to **u**. A node **v** is a **out-neighbour** of the node **u** if there exists an edge **{u,v}** from **u** to **v**. 
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, @Raptors is an out-neighbour of @UTSC, and @UTSC is an in-neightbour of @Raptors.
+
+## Neighbourhood
+
+For an undirected graph, the **neighbourhood** of a node **v** is the set of all nodes that are neighbours of **v**.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the neighbourhood of Charles is the set of nodes {Paco, Angela}.
+
+For a directed graph, there exists an **out-neighbourhood** and an **in-neighbourhood**.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, the out-neighbourhood of @Brian is the set of the nodes {@UTSC, @Uoft, @Angela} and the in-neighbourhood of @Brian is the set of the nodes {@UTSC, @Angela}
+
+## Degree
+
+For an undirected graph, the **degree** of a node **v** is the size (number of nodes) in the neighbourhood of **v**.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the degree of Will is 2.
+
+For a directed graph, the node **v** has an **in-degree** and an **out-degree**.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, the out-degree of @nytimes is 1 and the in-degree is 3.
+
+## Path
+
+A **path** is a sequence of consecutive nodes that can be visited by following exisiting edges between each pair of consevutive nodes.
+
+## Cycle
+
+For undirected graphs, a **cycle** is a path with at least three nodes that starts and ends at the same node.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, there is a cycle between the nodes Brian, Will and Angela.
+
+For directed graphs, a **cycle** is a path that begins and ends at the same node, but in this case the path can have any number of nodes.
+
+<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, there is a cycle between the nodes @Brian, @UTSC and @Angela.
+
+### Practice Exercises
+
+Find the neighbourhood and degree of each node in **G<sub>1</sub>** and **G<sub>2</sub>**. Find all cycles in **G<sub>1</sub>** and **G<sub>2</sub>**.
+
+---
+
+# Representing Graphs
+
+## Adjacency list
+
+The **adjacency list** is an array of size _N_ with one entry per node, where _N_ is the number of nodes in the graph. The _i<sup>th</sup>_ entry of the array contains a pointer to a linked list that stores the indexes of the nodes that _i_ is connected to (the neighbours of _i_).
+
+## Adjacency matrix
+
+The **adjacency matrix** is a 2D array of size _N_ x _N_, where _N_ is the number of nodes in the graph. For an undirected graph, the entry **A[i][j]** is 1 if nodes **i** and **j** are connected, and zero otherwise. For a directed graph, the entry **A[i][j]** is 1 if there is an edge from **i** to **j**, and zero otherwise.
+
+### Practice Exercises
+
+Represent **G<sub>1</sub>** and **G<sub>2</sub>** using Adjacency lists and matrices.
+
+# Who is following me?
+
+Read the code below and complete the two empty functions to follow a user and to check if a user is being followed by someone. Once you are done, how would you implement the same using adjacency matrices?
 
 ```c
-typedef struct BST_Node_Struct {
-  int data;
-  struct BST_Node_Struct *left;
-  struct BST_Node_Struct *right;
-} BST_Node
-```
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
-Similar to linked lists, we should write a function to create a new node:
+#define MAX_STR_LEN 1024
 
-```c
-BST_Node *new_BST_Node(int key){
+// User struct
+typedef struct user_struct {
+    // Twitter Handle
+    char twitter_handle[MAX_STR_LEN];
+    // List of accounts this user is following
+    struct following_node_struct* following;
+} User;
 
-  // Create the pointer to a new node and allocate memory
-  BST_Node *new_node = NULL;
-  new_node = (BST_Node *)calloc(1, sizeof(BST_Node));
+// LL for list of accounts following
+typedef struct following_node_struct {
+    // User following
+    User* user;
+    struct following_node_struct* next;
+} FollowingNode;
 
-  // Initialize the node
-  new_node->data = key;
-  new_node->left = NULL;
-  new_node->right = NULL;
+// Function to create a user and initialize
+// the following list
+User* create_user(char* handle){
+    // Initialize user
+    User *new_user = NULL;
+    new_user = (User*)calloc(1, sizeof(User));
+    if(new_user == NULL) return NULL;
+    new_user->following = NULL;
+    strcpy(new_user->twitter_handle, handle);
 
-  return new_node;
+    return new_user;
 }
-```
 
----
-
-### How can we insert a node?
-
----
-
-If the BST is empty, we just need to insert the node at the root. If the BST is not empty, then we need to insert the node where it corresponds: if the key is less or equal than the root, we will insert it in the left sub-tree and if the key is greater than the root, we will insert it in the right sub-tree.
-
-```c
-BST_Node *BST_insert(BST_Node *root, BST_Node *new_node) {
-  // TODO
-
-  return root;
+// User following
+void follow_user(User* user, User* to_follow) {
+    // TODO
 }
-```
 
-Let's traverse through this code, and insert the elements of the follwing array to an empty BST: ```[56, 17, 24, 78, 67, 98, 5, 2, 15, 31, 71]```. Once you are done, try it in <a href="https://www.cs.usfca.edu/~galles/visualization/BST.html">this simulator</a> to compare the results.
-
-*Note:* The simulator inserts nodes equal than the root on the right sub-tree instead of the next, so you need to keep that in mind while comparing exercises with duplicate elements.
-
----
-
-### How can we search for a node?
-
----
-
-When we search for a node, we want to return a pointer to it. If the BST is empty, we just need to return NULL, which will be also the case if we can't find the element. If the BST is not empty, then we need to traverse the subtree where it corresponds: if the key we are looking for is less or equal than the root, we will traverse the left sub-tree and if the key we are looking for is greater than the root, we will traverse the right sub-tree. Once we find the key we want we can return a pointer to it.
-
-```c
-BST_Node *BST_search(BST_Node *root, int key) {
-  // TODO
-  
-  return root;
+int is_following(User* a, User* b){
+    // TODO
+    // If user b is following a return 1, return 0 otherwise
 }
-```
 
-**Exercise: Find the smallest element in the BST**
-
-By the definition of BST, the smallest value will be the very left node. Complete the following function that returns the smallest key of the BST.
-
-```c
-int minNode (BST_Node *root) {
-  // TODO
-
-  return 0;
+int main(){
+    // Let's create a couple of users
+    User* angela = create_user("@_angelazb");
+    User* brian = create_user("@brianUTSC");
+    User* willy = create_user("@ItsWillSong");
+    User* charles = create_user("@kThisIsCvpv");
+    // Angela will follow Brian and Charles on twitter
+    follow_user(angela, brian);
+    follow_user(angela, charles);
+    // Brian will follow Angela back
+    follow_user(brian, angela);
+    // Willy will follow Angela and Charles
+    follow_user(willy,angela);
+    follow_user(willy,charles);
+    // Now, let's check who follows who
+    // Willy wants to know if Brian follows him :(
+    int willy_brian = is_following(willy, brian);
+    printf("Does Brian follow Willy? %d\n", willy_brian);
+    // Charles wants to know if Angela follows him :)
+    int charles_angela = is_following(charles, angela);
+    printf("Does Angela follow Charles? %d\n", charles_angela);
 }
+
 ```
-
----
-
-### How can we delete a node?
-
----
-
-As we discussed before, in a BST there can be 3 types of nodes: One with one child, with two children or with zero. The deletion process of a node is different based on how many children the node we want to delete has.
-
-Deleting a leaf is simpler as we can replace the parent to point to NULL. When we are deleting a node with one child, we can "replace" it with that child node. 
-
-Deleting a node with two children is more complex as we need to find the successor node to the node we are doing to delete, which will "replace" that node. The successor of the node is the smallest node from the right sub-tree, the element that comes right after it. To implement this case, it might be helpful for us to use our minNode function...
-
-```c
-BST_Node *BST_delete(BST_Node *root, int key) {
-  // TODO
-  
-  return root;
-}
-```
-
-To verify your function, try deleting a couple of nodes from the previous BST example: ```[56, 17, 24, 78, 67, 98, 5, 2, 15, 31, 71]```.
-
 ---

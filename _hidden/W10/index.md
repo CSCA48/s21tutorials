@@ -1,194 +1,103 @@
 ---
-title: Week 9 Tutorial
+title: Week 10 Tutorial
 sidebar: 10
-sidebar-title: Week 9
+sidebar-title: Week 10
 ---
 
 
----
-
-
-<p align="center"> <a href="https://youtu.be/isbd5BAG3_o"> Recorded videos (Thanks Willy!) </a> </p>
+<p align="center"> <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> Additional A3 Walkthrough </a> </p>
 
 ---
 
-# Graphs
+# How to write a recursive algorithm
 
-Graphs are used as a model to represent the relationship between the representation of items and problem we need to solve. We are trying to find a different way to represent a problem and use tools to solve it.
+---
+Assume you have a problem of some type:
+
+1. Break down the problem into a smaller (easier) problem(s) of the same type
+2. Recursively solve that smaller problem(s)
+3. Use the solution of the 'easier' problem to solve the original problem 
 
 ---
 
-# Definition of a Graph
-
-Each graph **G = (V,E)** consists of:
-
-- A set of **nodes** that represent data items. We call that set **V**.
-- A set of **edges** that represent the connections (relationship) between nodes. We call that set **E**.
-
-![graph](graph.jpeg)
+# Recursion Examples
 
 ---
 
-# Types of Graphs
+## Find the Largest number in an array
 
-There are two general types of graphs, **undirected** and **directed**
+We have solved this problem in a non-recursive way multiple times before. There are multiple ways we can solve it using recursion too. Sometimes using a helper can be useful, especially if you need to add more parameters to a function.
 
-## Undirected graphs
+### Exercise:
 
-Graphs with edges that represent direction in both ways, in other words, there is a reciprocal relationship.
-
-<span style="color:cornflowerblue">_Example:_</span> Facebook's friend network
-
-![undir](g1.jpeg)
-
-## Directed graphs
-
-Graphs with edges that represent one side direction, in other words, there is a one way relationship.
-
-<span style="color:cornflowerblue">_Example:_</span> Twitter's followers network
-
-![dir](g2.jpeg)
-
----
-
-# Terms to remember
-
-## Neighbours
-
-For an undirected graph, a node **v** is a **neighbour** of the node **u** if there exists an edge between those two nodes (that edge is represented by **{u,v}**). 
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the neighbour of Mustafa is Paco.
-
-For a directed graph, a node **v** is a **in-neighbour** of the node **u** if there exists an edge **{v,u}** from **v** to **u**. A node **v** is a **out-neighbour** of the node **u** if there exists an edge **{u,v}** from **u** to **v**. 
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, @Raptors is an out-neighbour of @UTSC, and @UTSC is an in-neightbour of @Raptors.
-
-## Neighbourhood
-
-For an undirected graph, the **neighbourhood** of a node **v** is the set of all nodes that are neighbours of **v**.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the neighbourhood of Charles is the set of nodes {Paco, Angela}.
-
-For a directed graph, there exists an **out-neighbourhood** and an **in-neighbourhood**.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, the out-neighbourhood of @Brian is the set of the nodes {@UTSC, @Uoft, @Angela} and the in-neighbourhood of @Brian is the set of the nodes {@UTSC, @Angela}
-
-## Degree
-
-For an undirected graph, the **degree** of a node **v** is the size (number of nodes) in the neighbourhood of **v**.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, the degree of Will is 2.
-
-For a directed graph, the node **v** has an **in-degree** and an **out-degree**.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, the out-degree of @nytimes is 1 and the in-degree is 3.
-
-## Path
-
-A **path** is a sequence of consecutive nodes that can be visited by following exisiting edges between each pair of consevutive nodes.
-
-## Cycle
-
-For undirected graphs, a **cycle** is a path with at least three nodes that starts and ends at the same node.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>1</sub>**, there is a cycle between the nodes Brian, Will and Angela.
-
-For directed graphs, a **cycle** is a path that begins and ends at the same node, but in this case the path can have any number of nodes.
-
-<span style="color:cornflowerblue">_Example:_</span> In **G<sub>2</sub>**, there is a cycle between the nodes @Brian, @UTSC and @Angela.
-
-### Practice Exercises
-
-Find the neighbourhood and degree of each node in **G<sub>1</sub>** and **G<sub>2</sub>**. Find all cycles in **G<sub>1</sub>** and **G<sub>2</sub>**.
-
----
-
-# Representing Graphs
-
-## Adjacency list
-
-The **adjacency list** is an array of size _N_ with one entry per node, where _N_ is the number of nodes in the graph. The _i<sup>th</sup>_ entry of the array contains a pointer to a linked list that stores the indexes of the nodes that _i_ is connected to (the neighbours of _i_).
-
-## Adjacency matrix
-
-The **adjacency matrix** is a 2D array of size _N_ x _N_, where _N_ is the number of nodes in the graph. For an undirected graph, the entry **A[i][j]** is 1 if nodes **i** and **j** are connected, and zero otherwise. For a directed graph, the entry **A[i][j]** is 1 if there is an edge from **i** to **j**, and zero otherwise.
-
-### Practice Exercises
-
-Represent **G<sub>1</sub>** and **G<sub>2</sub>** using Adjacency lists and matrices.
-
-# Who is following me?
-
-Read the code below and complete the two empty functions to follow a user and to check if a user is being followed by someone. Once you are done, how would you implement the same using adjacency matrices?
+Implement the largest function using loops, and once you find a working solution, implement it using recursion.
 
 ```c
-#include <string.h>
 #include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
 
-#define MAX_STR_LEN 1024
+int main() {
+    int array[] = {33, 12, 45, 9, 24};
+    int n = 5;
 
-// User struct
-typedef struct user_struct {
-    // Twitter Handle
-    char twitter_handle[MAX_STR_LEN];
-    // List of accounts this user is following
-    struct following_node_struct* following;
-} User;
+    // Implement the large function!
+    int largest_element = largest(array, n);
 
-// LL for list of accounts following
-typedef struct following_node_struct {
-    // User following
-    User* user;
-    struct following_node_struct* next;
-} FollowingNode;
-
-// Function to create a user and initialize
-// the following list
-User* create_user(char* handle){
-    // Initialize user
-    User *new_user = NULL;
-    new_user = (User*)calloc(1, sizeof(User));
-    if(new_user == NULL) return NULL;
-    new_user->following = NULL;
-    strcpy(new_user->twitter_handle, handle);
-
-    return new_user;
+    printf("The largest number of the list is: %d\n", largest_element);
 }
-
-// User following
-void follow_user(User* user, User* to_follow) {
-    // TODO
-}
-
-int is_following(User* a, User* b){
-    // TODO
-    // If user b is following a return 1, return 0 otherwise
-}
-
-int main(){
-    // Let's create a couple of users
-    User* angela = create_user("@_angelazb");
-    User* brian = create_user("@brianUTSC");
-    User* willy = create_user("@ItsWillSong");
-    User* charles = create_user("@kThisIsCvpv");
-    // Angela will follow Brian and Charles on twitter
-    follow_user(angela, brian);
-    follow_user(angela, charles);
-    // Brian will follow Angela back
-    follow_user(brian, angela);
-    // Willy will follow Angela and Charles
-    follow_user(willy,angela);
-    follow_user(willy,charles);
-    // Now, let's check who follows who
-    // Willy wants to know if Brian follows him :(
-    int willy_brian = is_following(willy, brian);
-    printf("Does Brian follow Willy? %d\n", willy_brian);
-    // Charles wants to know if Angela follows him :)
-    int charles_angela = is_following(charles, angela);
-    printf("Does Angela follow Charles? %d\n", charles_angela);
-}
-
 ```
 ---
+
+## Find if a string is a palindrome or not
+
+A palindrome is a word or phrase that reads the same backward as forward. Implement a recursive function to find if a word is a palindrome or not.
+
+### Exercise:
+
+Implement the isPalindrome function using loops, and once you find a working solution, implement it using recursion.
+
+```c
+#include <stdio.h>
+#include <string.h>
+// Not necessary!
+// #include <stdbool.h>
+
+#define MAX_LENGTH 1024
+
+int main() {
+    char word [MAX_LENGTH] = "racecar";
+
+    // Implement the isPalindrome function!
+    if (isPalindrome(word)){
+        printf("The word %s is a palindrome", word);
+    } else{
+        printf("The word %s is not a palindrome", word);
+    }
+}
+```
+---
+
+## Find the factorial of the number
+
+A factorial is when you multiply a number by all the numbers below it. Implement a recursive function to calculate the factorial of a number.
+
+### Exercise:
+
+Implement the factorial function using loops, and once you find a working solution, implement it using recursion.
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+  int number = 6;
+  int result = 0;
+
+  // Implement the factorial function!
+  result = factorial(number);
+
+  printf("Number = %d\n", number);
+  printf("Factorial = %d\n", result);  
+  
+  return 0;
+}
+```

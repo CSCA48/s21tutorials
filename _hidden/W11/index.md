@@ -1,103 +1,56 @@
 ---
-title: Week 10 Tutorial
+title: Week 11 Tutorial
 sidebar: 11
-sidebar-title: Week 10
+sidebar-title: Week 11
 ---
 
-
-<p align="center"> <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> Additional A3 Walkthrough </a> </p>
-
----
-
-# How to write a recursive algorithm
+# More Recursion Examples !
 
 ---
-Assume you have a problem of some type:
+## Find the power of a number
 
-1. Break down the problem into a smaller (easier) problem(s) of the same type
-2. Recursively solve that smaller problem(s)
-3. Use the solution of the 'easier' problem to solve the original problem 
-
----
-
-# Recursion Examples
-
----
-
-## Find the Largest number in an array
-
-We have solved this problem in a non-recursive way multiple times before. There are multiple ways we can solve it using recursion too. Sometimes using a helper can be useful, especially if you need to add more parameters to a function.
-
-### Exercise:
-
-Implement the largest function using loops, and once you find a working solution, implement it using recursion.
+Create a function to find the power of a number using recursion. Try it yourself first and compare your solution with your classmates :)
 
 ```c
-#include <stdio.h>
+#include<stdio.h>
 
-int main() {
-    int array[] = {33, 12, 45, 9, 24};
-    int n = 5;
-
-    // Implement the large function!
-    int largest_element = largest(array, n);
-
-    printf("The largest number of the list is: %d\n", largest_element);
+int main(){
+   int base, power, result;
+   printf("Enter the base and power: ");
+   scanf("%d %d",&base, &power);
+   // base ^ power, power >= 0
+   result = pow_recursive(base, power);
+   printf("%d to the power of %d is %d\n", base, power, result);
+   return 0;
 }
 ```
 ---
 
-## Find if a string is a palindrome or not
+## Can you find the right password?
 
-A palindrome is a word or phrase that reads the same backward as forward. Implement a recursive function to find if a word is a palindrome or not.
-
-### Exercise:
-
-Implement the isPalindrome function using loops, and once you find a working solution, implement it using recursion.
-
-```c
-#include <stdio.h>
-#include <string.h>
-// Not necessary!
-// #include <stdbool.h>
-
-#define MAX_LENGTH 1024
-
-int main() {
-    char word [MAX_LENGTH] = "racecar";
-
-    // Implement the isPalindrome function!
-    if (isPalindrome(word)){
-        printf("The word %s is a palindrome", word);
-    } else{
-        printf("The word %s is not a palindrome", word);
-    }
-}
-```
----
-
-## Find the factorial of the number
-
-A factorial is when you multiply a number by all the numbers below it. Implement a recursive function to calculate the factorial of a number.
-
-### Exercise:
-
-Implement the factorial function using loops, and once you find a working solution, implement it using recursion.
+Let's say there is a _secret_ function to validate a password. 
 
 ```c
 #include <stdio.h>
 #include <string.h>
 
-int main() {
-  int number = 6;
-  int result = 0;
-
-  // Implement the factorial function!
-  result = factorial(number);
-
-  printf("Number = %d\n", number);
-  printf("Factorial = %d\n", result);  
-  
-  return 0;
+/**
+ * Assumes `password` is exactly 6 characters long.
+ * `password` only contains lowercase letters a-z
+ *
+ * Returns 1 if password is correct, 0 otherwise
+ */
+int check_password(char *password) {
+  int hash[7] = {2876, 2832, 3196, 2908, 2712, 2988};
+  for (int i = 0; i < 6; i++)
+    if ((password[i] ^ (password[5 - i] * 29)) != hash[i])
+      return 0;
+  return 1;
 }
 ```
+
+Implement a function that returns the secret password. That is, you want to create a function that will use ```check_password``` to find the 6-char secret password.
+
+*Hint:* Try solving it using loops first!
+
+---

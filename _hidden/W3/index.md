@@ -1,210 +1,187 @@
 ---
-title: Week 2 Tutorial
+title: Week 3 Tutorial
 sidebar: 3
-sidebar-title: Week 2
+sidebar-title: Week 3
 ---
 
 
 ---
 
 
-<p align="center"> <a href='https://youtu.be/6YJWDlFQyWc'> Recorded video (courtesy Willy) </a> </p>
+<p align="center"> <a href="https://www.youtube.com/playlist?list=PLKjkL6I7UpX8kEaSQZZ0aoev1GjX1hF-U"> Recorded videos (courtesy of Mustafa Quraish) </a> </p>
 
 ---
 
-# C Memory Model and Arrays
+# Pointers!
 
----
+Before you get scared off - pointers are just variables! The only thing different about them is that they store the *memory addresses* (or box numbers) of other variables - which we can decide. When we create a pointer, its type must match the variable type.
 
-## Memory Model in C
-
----
-
-Memory in C can be thought of as a locker room! We have one locker for each variable, all locker boxes are numbered in increasing order and they can only be accessed by the right user.
-
-Associated with each locker is important information like the memory address (locker number, which is unique), variable name, variable type and the variable value. Here's a picture you can keep in your mind:
-
-![empty](MMEmpty.png)
-
----
-
-Remember that lockers are created in memory automatically for:
-- Declared variables
-- Input parameters to functions
-- Storing return values of functions
-
-> In the next unit, we will learn about explicitly asking for some lockers in C!
-
----
-
-
-Let's try an example and draw the diagram of the memory model for the following piece of code, right at the point where the result is returned (right before releasing the spaced reserved for the funcion)
-
-
-- Remember that each function gets it's own area of lockers!
-
-> If you haven't already, it would be a good time to go read the Unit 2 notes before attempting these yourself.
+For example, if you want to initialize the pointer `p` that will store the address of an integer, we can do the following:
 
 ```c
-#include<stdio.h>
-
-float div_by_two(int s) {
-    float result;
-    result = s / 2;
-    // Draw the memory model at this point!
-    return result;      
-}
-
-int main() {
-    int x, result;
-    float y, z;
-    
-    x = 3;
-    y = div_by_two(x)
-    z = y + 3;
-    
-    result = z / 2;
-    printf("The result is: %d\n", result);
-
-    return 0;
-}
-
+int *p = NULL;
 ```
 
-If you're working digitally, you can use this template to draw on:
-
-![template](MMTemp.png)
+Note that in this case we have said `p` points to an integer. `NULL` is the default value we give something. Think of it as saying "Does not point to anything".
 
 ---
 
-## Arrays & Strings
+## How do we use pointers?
 
 ---
 
-### Arrays
-
-- Arrays are a fixed-size collection of contiguous boxes (in memory) of the same data type. 
-
-- A *very* important thing to remember is that when arrays are passed to functions by telling its location in memory. This means that the function directly access and modifies the original array. It does **not** make a copy.
-
-- Remember that unlike Python, C does not warn you about using out-of-bounds indeces so it is your responsibility to be careful on how you are indexing, otherwise you will access elements outside of the array.
-
----
-
-
-### Strings
-
-Strings are also known as arrays of characters, but with an special add-on: the end-of-string delimiter `\0`. The end-of-string delimiter indicates when the string ends.
-
-Let's look at the following piece of code, what do you think it will print out?
+We first need to **assign** a variable to our pointer. For that, we use the `&` operator. The `&` operator is the *address-of* the variable we are referencing.
 
 ```c
-#include<stdio.h>
-
-int main() {
-    char original[1024] = "This is the original string!";
-    char unoriginal[1024] = "And this is another string!";
-
-    // We want `original` to be the same string as `unoriginal`
-    original = unoriginal;
-    printf("%s\n", original);
-
-    return 0;
-}
+// We have already declared our pointer above.
+// Now, we are going to store the address of an integer.
+int x = 0;
+p = &x;
 ```
 
-How about the following piece of code; what does it do?
+We use pointers to **access** the value from the variable that they are pointing to. 
 
 ```c
-#include<stdio.h>
-
-int main() {
-    int array_one[10];
-    int array_two[5];
-
-    for (int i = 0; i < 5; i++){
-        array_two[i] = i;
-    }
-
-    // We want to initialize the first 5 elements of array_one
-    // to be the elements of array_two
-    array_one = array_two;
-    
-    return 0;
-}
+// In this case, now y will have the same value as the one
+// p is pointing to (aka 'x')
+int y = *(p);
+// Let's say now you want to access the variable that is
+// stored next to x.
+int z = *(p + 1);
 ```
 
-As we could see, both of them do not compile. 
-
-<details> 
-  <summary>How can we fix them in order to make them work? </summary>
-   - You have to do it yourself. If we want to make a copy of an array, we have to do it each element at once. We will see other build-in functions later, that can make our job easier.
-</details>
-
----
-
-# Exercise 
-
----
-
-Write a function that takes two input strings and *swaps* their content. Note that the size of the arrays for each string is 1024, but the strings could have a different length.
-
-Here's a template for you to complete:
+We can not only copy the contents of the variable that the pointer is pointing to, but we can also access memory boxes that are around the variable box. For that we can use an *offset*, that will help us move around memory.
 
 ```c
-#include<stdio.h>
+// Let's say now you want to access the variable that is
+// stored next to x.
+int z = *(p + 1);
+// The offset is 1 in this case.
+```
 
-void swap( ... ) {
-    ...
-    return;
+We can also **modify** the value of the memory box stored in the pointer.
+
+```c
+// Let's change the value of x to 3.
+// We need to modify then it's memory box
+*(p) = 3;
+```
+
+---
+
+## Worked exercise
+
+---
+
+Implement a function called `div_mod()` that takes in two integers `a` and `b`, and returns the quotient (`a / b`) and the remainder (`a % b`).
+
+*Hint:* You **can not** return multiple values directly... How can pointers help?
+
+```c
+#include <stdio.h>
+
+_____ div_mod( ________ ) {
+    _______ // Fill in
 }
 
 int main() {
-    char first[1024] = "Christmas is in eleven months!";
-    char second[1024] = "It's beginning to look a lot like Christmas";
+  int a = 19;
+  int b = 5;
+  int div, mod;
 
-    printf("F: %s\nS: %s\n", first, second);
-    // Expected:
-    // F: Christmas is in eleven months!
-    // S: It's beginning to look a lot like Christmas
+  // Call your function here...
+  ______
 
-    swap(first, second);
-
-    printf("F: %s\nS: %s\n", first, second);
-    // Expected:
-    // F: It's beginning to look a lot like Christmas
-    // S: Christmas is in eleven months!
-
-    return 0;
+  // Should print: "a / b = 3,  a % b = 4"
+  printf("a / b = %d,  a %% b = %d\n", div, mod);
+  return 0;
 }
 
 ```
 
 ---
 
-## Let's go further
+## Pointers and Arrays
 
-Write a function `strfind()` that *searches* for a given string in the specified main string, and returns the index of the first occurrence of the given string. If there is no match it returns `-1`. This will be extremely useful in your exercise 1. Here is some example output for this function:
+---
+
+Now that we have learnt about pointers, you can use those to work with arrays too. There are two ways we can store the address of the head of the array in a pointer.
 
 ```c
-strfind("My name is Angela", "Angela") -> 11
-strfind("My name is Willy", "Charles") -> -1
-``` 
+// Don't forget to initialize the pointer
+int *p = NULL;
+int my_array[5];
+
+// Way 1: getting the address of the first element
+p = &my_array[0];
+// Way 2: direct assignment
+p = my_array;
+```
+
+We can use offsets to access (and modify) other values of the array.
+
+```c
+// We can initialize the values of the array to 0
+*(p) = 0;
+*(p + 1) = 0;
+*(p + 2) = 0;
+*(p + 3) = 0;
+*(p + 4) = 0;
+```
+
+- ***Note:*** `my_array[x]` is exactly equivalent to `*(my_array + x)`. In fact, your compiler translates array indexing into pointer dereferencing in precisely this way! Think of it as taking the address of the first element, adding an offset to find the correct address for the element you want, and then dereferencing to get the element.
 
 ---
 
-
-# Additional Exercises
-
----
-
-These are not necessary, but give you an avenue to develop what you did in this tutorial further.
+## Exercises
 
 ---
 
+Given the following starter code, implement the function *findMinMax* to return the minimum and maximum values in a given array. Use **only** pointer notation!
 
-1. Once you have completed exercise 1, try to use the solution to implement a `replaceAllSubstrings()` function that replaces *every* occurence of a substring with something else. Implementation details are left up to you - you do not have to submit this.
+*Hint:* You can't return multiple values directly... How can pointers help?
 
-2. Write a function that takes in a 2-dimensional array (ie, an array of arrays) representing a matrix, and then transposes it. [Here's some starter code.](transpose_matrix.c)
+```c
+#include<stdio.h>
 
+___ findMinMax(int *arr, int arr_size, _____) {
+    ______ // Fill in
+}
+
+int main() {
+    int array[5] = {10, 3, 24, 9, -1};
+    int arr_min, arr_max;
+
+    // Call your function...
+    _______
+
+    printf("min is %d, max is %d\n", arr_min, arr_max);
+}
+```
+
+---
+
+You have seen in the notes and in class the `reverse()` function to reverse arrays (and as a result, also strings). Rewrite this function using **just** pointer notation with what you learned above.
+
+*Hint:* Use pointers and offsets!
+
+```c
+#include <stdio.h>
+
+void reverse(char *str) {
+    ______ // Fill in
+}
+
+int main() {
+    char str[1024] = "Hello World!";
+
+    // Expected: Hello World!
+    printf("Before: %s\n", str);
+
+    reverse(str);
+
+    // Expected: !dlorW olleH
+    printf("After: %s\n", str);
+}
+```
 ---
