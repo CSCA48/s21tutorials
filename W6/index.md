@@ -42,19 +42,19 @@ Angela found a TikTok recipe of <span style="color:mediumpurple">**purple cupcak
 
 ## Task 1: Cupcake Delivery list
 
-Define the the structs ```Delivery``` and ```Delivery_List_Node```. The ```Delivery``` struct represents the CDT that contains the name of the recepient (TA) and the number of cupcakes they want. The ```Delivery_List_Node``` struct contains a ```Delivery``` and a pointer to the next ```Delivery_List_Node```.
+Define the the structs `Delivery` and `DeliveryListNode`. The `Delivery` struct represents the CDT that contains the name of the recepient (TA) and the number of cupcakes they want. The `DeliveryListNode` struct contains a `Delivery` and a pointer to the next `DeliveryListNode`.
 
 ---
 
 ## Task 2: New Delivery
 
-Create a function ```new_Delivery_Node``` that will initialize a new ```Delivery_List_Node``` given a name and the number of cupcakes. 
+Create a function `new_Delivery_Node` that will initialize a new `DeliveryListNode` given a name and the number of cupcakes. 
 
 ---
 
 ## Task 3: Inserting Deliveries
 
-Create a function ```insert_delivery``` to insert the deliveries from TAs into the ```Delivery_List_Node``` called ```cupcake_delivery_list```. Remember the delivery is first-come first-serve.
+Create a function `insert_delivery` to insert the deliveries from TAs into the `DeliveryListNode` called `cupcake_delivery_list`. Remember the delivery is first-come first-serve.
 
 ---
 
@@ -62,7 +62,7 @@ Create a function ```insert_delivery``` to insert the deliveries from TAs into t
 
 Brian and Paco found out that Angela is giving cupcakes to the other TAs and now they want to try some too. However, they want their orders before than everyone else!
 
-Create a function ```insert_priority_delivery``` to insert special deliveries to the beginning of the ```Delivery_List_Node``` called ```cupcake_delivery_list```.
+Create a function `insert_priority_delivery` to insert special deliveries to the beginning of the `DeliveryListNode` called `cupcake_delivery_list`.
 
 ---
 
@@ -71,7 +71,7 @@ This is an example of how you would call the functions from main with some discu
 ```c
 int main(){
     // Task 1 and 2:
-    Delivery_List_Node *cupcake_delivery_list = NULL;
+    DeliveryListNode *cupcake_delivery_list = NULL;
     // -> Why am I not allocating memory in the previous line?
     cupcake_delivery_list = new_Delivery_Node("Mustafa", 12);
 
@@ -92,7 +92,7 @@ int main(){
     // this function without returning a pointer?
 
     // Print to test!
-    Delivery_List_Node *currentNode = cupcake_delivery_list;
+    DeliveryListNode *currentNode = cupcake_delivery_list;
 
     for(int i = 0; i< 18; i++){
         printf("Order #%d: %s --- %d cupcake(s)\n", i+1,currentNode->order.name, currentNode->order.numOfCupcakes);
@@ -108,8 +108,25 @@ int main(){
 
 The first-come first-serve order might not be the best in this scenario because some people may live close to each other and Angela is scared of taking the highway so we need to reduce the amount of driving.
 
-Re-implement all the previous tasks adding a new field for ```Delivery``` called distance, which represents the distance from Angela's house to the receipient's. For Task 3, we want to insert the orders in order of distance (closer ones to Angela's should be delivered first). For Task 4, we want to still insert the orders at the front, so you might want to update their distance to -1.
+Re-implement all the previous tasks adding a new field for `Delivery` called distance, which represents the distance from Angela's house to the receipient's. For Task 3, we want to insert the orders in order of distance (closer ones to Angela's should be delivered first). For Task 4, we want to still insert the orders at the front, so you might want to update their distance to -1.
 
-*Note: I know that technically the distances might be in opposite directions, but this is just an exercise so pretend distance is an accurate way of sorting :)*
+*Note: Technically, this is not correct since the distances might be in opposite directions, but this is just an exercise so pretend distance is an accurate way of sorting :)*
 
 ---
+
+## Additional exercises
+
+1. Write a function to reverse the linked list of deliveries. You may assume that there are no priority deliveries.
+
+2. Write a function to sort the list of deliveries by the number of cupcakes in each order from lowest to highest.
+
+3. Write a function that takes the list of deliveries, and a number `N`. Then, assuming Angela has made `N` and delivered them to the the people in the list based on the order of the list, remove the orders that have been fulfilled completely, and update the number of cupcakes for the order (if there is one) that was not completely fulfilled. For instance:
+
+    ```
+    # If we have:
+    list = (Mustafa, 10) -> (Charles, 5) -> (Brian, 7) -> NULL
+    N = 18
+
+    # Then the list after the function should be:
+    list = (Brian, 4) -> NULL
+```
